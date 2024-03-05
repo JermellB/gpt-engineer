@@ -11,6 +11,7 @@ from gpt_engineer.ai import AI
 from gpt_engineer.chat_to_files import to_files
 from gpt_engineer.db import DBs
 from gpt_engineer.learning import human_input
+from security import safe_command
 
 
 def setup_sys_prompt(dbs: DBs) -> str:
@@ -196,7 +197,7 @@ def execute_entrypoint(ai: AI, dbs: DBs) -> List[dict]:
     print("You can press ctrl+c *once* to stop the execution.")
     print()
 
-    p = subprocess.Popen("bash run.sh", shell=True, cwd=dbs.workspace.path)
+    p = safe_command.run(subprocess.Popen, "bash run.sh", shell=True, cwd=dbs.workspace.path)
     try:
         p.wait()
     except KeyboardInterrupt:

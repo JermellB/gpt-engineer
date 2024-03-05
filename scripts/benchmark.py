@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Iterable, Union
 
 from typer import run
+from security import safe_command
 
 
 def main(
@@ -28,8 +29,7 @@ def main(
 
             log_path = bench_folder / "log.txt"
             log_file = open(log_path, "w")
-            process = subprocess.Popen(
-                [
+            process = safe_command.run(subprocess.Popen, [
                     "python",
                     "-u",  # Unbuffered output
                     "-m",
@@ -60,8 +60,7 @@ def main(
         print()
 
         with contextlib.suppress(KeyboardInterrupt):
-            subprocess.run(
-                [
+            safe_command.run(subprocess.run, [
                     "python",
                     "-m",
                     "gpt_engineer.main",
